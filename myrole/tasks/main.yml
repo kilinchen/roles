@@ -1,0 +1,28 @@
+---
+# tasks file for roles/myrole
+- name: install packages {{ package_web }}
+  ansible.builtin.dnf:
+    name: "{{ package_web }}"
+    state: present
+
+- name: create default index.html content.
+  ansible.builtin.copy:
+    content: |
+      This is a default index content.
+    dest: /var/www/html/index.html
+
+- name: open port {{ service_port }}
+  ansible.builtin.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop: "{{ service_port }}"
+
+- name: start service
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: true
+  loop: "{{ services }}"
+  notify: jinja-to-index

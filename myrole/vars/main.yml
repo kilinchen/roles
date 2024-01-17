@@ -1,0 +1,13 @@
+---
+# vars file for roles/myrole
+package_web: httpd
+services:
+  - httpd
+  - firewalld
+service_port:
+  - http
+  - https
+file_src: file/index.html.j2
+urls:
+  - servera.mzcom.idv.tw
+  - serverb.mzcom.idv.tw
